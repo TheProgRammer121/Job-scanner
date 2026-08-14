@@ -44,6 +44,10 @@ class SupabaseDatabase:
         row = rows[0]
         return Company(row["id"], row["name"], row["career_url"], row["enabled"], row["priority"])
 
+    def list_companies(self) -> list[Company]:
+        rows = self._request("GET", "companies?enabled=eq.true&select=id,name,career_url,enabled,priority&order=priority.asc,name.asc")
+        return [Company(row["id"], row["name"], row["career_url"], row["enabled"], row["priority"]) for row in rows]
+
     def persist(self, company: Company, result: ScrapeResult, scored: list[tuple[JobPosting, Score]]) -> PersistResult:
         known = self._request("GET", f"jobs?company_id=eq.{company.id}&select=id,identity") if result.successful else []
         existing = {row["identity"]: row["id"] for row in known}

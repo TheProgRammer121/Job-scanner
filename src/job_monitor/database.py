@@ -62,6 +62,10 @@ class Database:
         row = self.connection.execute("SELECT id, name, career_url, enabled, priority FROM companies WHERE name=?", (company.name,)).fetchone()
         return Company(row["id"], row["name"], row["career_url"], bool(row["enabled"]), row["priority"])
 
+    def list_companies(self) -> list[Company]:
+        rows = self.connection.execute("SELECT id, name, career_url, enabled, priority FROM companies WHERE enabled=1 ORDER BY priority, name").fetchall()
+        return [Company(row["id"], row["name"], row["career_url"], bool(row["enabled"]), row["priority"]) for row in rows]
+
     def persist(self, company: Company, result: ScrapeResult, scored: list[tuple[JobPosting, Score]]) -> PersistResult:
         now = utc_now()
         baseline = self.connection.execute("SELECT COUNT(*) FROM jobs WHERE company_id=?", (company.id,)).fetchone()[0] == 0

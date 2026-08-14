@@ -21,11 +21,13 @@ def main() -> int:
     preferences = (list_value("PREFERRED_KEYWORDS"), list_value("PREFERRED_LOCATIONS"))
     relevant, failures = [], []
     try:
-        companies = [company for company in load_companies() if company.enabled and (not arguments.company or company.name == arguments.company)]
+        for configured in load_companies():
+            database.upsert_company(configured)
+        companies = [company for company in database.list_companies() if not arguments.company or company.name == arguments.company]
         if arguments.company and not companies:
             parser.error(f"No enabled company named {arguments.company!r} in companies.json")
         for configured in companies:
-            company = database.upsert_company(configured)
+            company = configured
             result = manager.fetch(company)
             scored = [(job, score_job(job, *preferences)) for job in result.jobs]
             stored = database.persist(company, result, scored)
