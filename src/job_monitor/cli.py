@@ -4,10 +4,10 @@ import argparse
 import os
 
 from .config import list_value, load_companies, load_dotenv
-from .database import Database
 from .notifier import send_summary
 from .scoring import score_job
 from .scrapers import ScraperManager
+from .store import create_store
 
 
 def main() -> int:
@@ -17,7 +17,7 @@ def main() -> int:
     parser.add_argument("--send-baseline", action="store_true", help="Send jobs found for the first time")
     arguments = parser.parse_args()
     load_dotenv()
-    database, manager = Database(), ScraperManager()
+    database, manager = create_store(), ScraperManager()
     preferences = (list_value("PREFERRED_KEYWORDS"), list_value("PREFERRED_LOCATIONS"))
     relevant, failures = [], []
     try:

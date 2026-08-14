@@ -26,3 +26,5 @@ jobs:
           NOTIFY_TO: ${{ secrets.NOTIFY_TO }}
           PREFERRED_KEYWORDS: ${{ secrets.PREFERRED_KEYWORDS }}
           PREFERRED_LOCATIONS: ${{ secrets.PREFERRED_LOCATIONS }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

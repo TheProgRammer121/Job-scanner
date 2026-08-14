@@ -10,7 +10,7 @@ A personal, zero-cost job monitor built around conservative public-page checks. 
 4. Edit `companies.json` with the careers pages to monitor.
 5. Run `python main.py`.
 
-The included NVIDIA entry uses the URL supplied for this project. The first run creates the local `data/job_monitor.db` database. Use `--send-baseline` only if you want an email containing every opening discovered on that first run.
+The included NVIDIA entry uses the URL supplied for this project. The first run creates the local `data/job_monitor.db` database. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to use Supabase instead—this is required for a reliable GitHub Actions schedule because each hosted runner is temporary. Use `--send-baseline` only if you want an email containing every opening discovered on that first run.
 
 ## Commands
 
@@ -30,4 +30,4 @@ python main.py --send-baseline Include first-run jobs in the email
 
 ## Automation
 
-The GitHub Actions workflow in `.github/workflows/daily_monitor.yml` runs at 08:00 India Standard Time (02:30 UTC) and also supports manual runs. Add the same `.env` values as repository secrets before enabling email in Actions.
+The GitHub Actions workflow in `.github/workflows/daily_monitor.yml` runs at 08:00 India Standard Time (02:30 UTC) and also supports manual runs. Before activating it, run [`supabase/schema.sql`](supabase/schema.sql) in the Supabase SQL Editor and add the SMTP and Supabase values as repository secrets.
